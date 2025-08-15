@@ -227,7 +227,6 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
       {id:11, title:"Embroidered Kurti", category:"Kurti", price:1299, mrp:1699, rating:4.6, created:"2025-08-08", img:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=900&auto=format&fit=crop"},
       {id:12, title:"A-Line Day Dress", category:"Dress", price:1399, mrp:1799, rating:4.0, created:"2025-03-18", img:"https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=900&auto=format&fit=crop"}
     ];
-
     // ------ State ------
     const state = {
       query: '',
@@ -236,13 +235,12 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
       cart: JSON.parse(localStorage.getItem('tripti_cart')||'{}') // {id: qty}
     };
 
-    // ------ Helpers ------
+  // ------ Helpers ------
     const fmtINR = n => '₹' + n.toLocaleString('en-IN');
     const $(id) = document.getElementById.bind(document);
-
     function saveCart(){localStorage.setItem('tripti_cart', JSON.stringify(state.cart));renderCart();updateCartCount();}
 
-    function filtered(){
+   function filtered(){
       let list = products.filter(p=>{
         const q = state.query.toLowerCase();
         const matchQuery = p.title.toLowerCase().includes(q) || p.category.toLowerCase().includes(q);
@@ -259,14 +257,14 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
       return list;
     }
 
-    // ------ Render Products ------
+   // ------ Render Products ------
     function renderGrid(){
       const grid = $('grid');
       const list = filtered();
       grid.innerHTML = list.map(p=>{
         const off = Math.max(0, Math.round((1 - p.price/p.mrp)*100));
         return `
-          <article class="product">
+   <article class="product">
             <div style="position:relative">
               ${off>0?`<span class="pill">${off}% OFF</span>`:''}
               <img src="${p.img}" alt="${p.title}">
@@ -290,7 +288,7 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
           </article>`
       }).join('');
 
-      // qty controls per card
+   // qty controls per card
       grid.querySelectorAll('.qty').forEach(box=>{
         let q=1; const span=box.querySelector('.q');
         box.addEventListener('click',e=>{
@@ -299,7 +297,7 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
         });
       });
 
-      // add to cart buttons
+  // add to cart buttons
       grid.querySelectorAll('.add').forEach(btn=>{
         btn.addEventListener('click',()=>{
           const id = +btn.dataset.id;
@@ -311,7 +309,7 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
       });
     }
 
-    // ------ Cart ------
+  // ------ Cart ------
     function cartItems(){
       return Object.entries(state.cart).map(([id,qty])=>{
         const p = products.find(x=>x.id==id);
@@ -319,16 +317,16 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
       });
     }
 
-    function cartSubtotal(){
+  function cartSubtotal(){
       return cartItems().reduce((s,i)=> s + i.price*i.qty, 0);
     }
 
-    function renderCart(){
+   function renderCart(){
       const wrap = $('cartItems');
       const items = cartItems();
       if(items.length===0){wrap.innerHTML = `<div class="empty">Your cart is empty. Let\'s add some styles!</div>`; $('subtotal').textContent = fmtINR(0); return}
       wrap.innerHTML = items.map(i=>`
-        <div class="cart-item">
+   <div class="cart-item">
           <img src="${i.img}" alt="${i.title}">
           <div>
             <div style="font-weight:600">${i.title}</div>
@@ -341,9 +339,9 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
           <button class="btn ghost rm" data-id="${i.id}">Remove</button>
         </div>`).join('');
 
-      $('subtotal').textContent = fmtINR(cartSubtotal());
+  $('subtotal').textContent = fmtINR(cartSubtotal());
 
-      // qty & remove handlers
+  // qty & remove handlers
       wrap.querySelectorAll('.qty').forEach(box=>{
         const id= +box.dataset.id; const span=box.querySelector('.q');
         box.addEventListener('click',e=>{
@@ -354,17 +352,17 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
       wrap.querySelectorAll('.rm').forEach(btn=>btn.addEventListener('click',()=>{delete state.cart[+btn.dataset.id]; saveCart(); renderCart();}));
     }
 
-    function updateCartCount(){
+   function updateCartCount(){
       const n = Object.values(state.cart).reduce((s,v)=>s+v,0);
       $('cartCount').textContent = n;
     }
 
-    // ------ Drawer ------
+  // ------ Drawer ------
     const drawer = $('cartDrawer');
     function openDrawer(){drawer.classList.add('open'); drawer.setAttribute('aria-hidden','false');}
     function closeDrawer(){drawer.classList.remove('open'); drawer.setAttribute('aria-hidden','true');}
 
-    // ------ Contact Form (demo) ------
+  // ------ Contact Form (demo) ------
     $('contactForm').addEventListener('submit', (e)=>{
       e.preventDefault();
       const data = {
@@ -376,7 +374,7 @@ footer{background:#fff;border-top:1px solid #f3e2df;padding:20px 10px;color:var(
       e.target.reset();
     });
 
-    // ------ Events ------
+  // ------ Events ------
     $('search').addEventListener('input', (e)=>{state.query=e.target.value; renderGrid();});
     $('category').addEventListener('change', (e)=>{state.category=e.target.value; renderGrid();});
     $('sort').addEventListener('change', (e)=>{state.sort=e.target.value; renderGrid()
